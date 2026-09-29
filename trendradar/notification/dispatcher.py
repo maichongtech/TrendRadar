@@ -490,6 +490,8 @@ class NotificationDispatcher:
                 account_label=account_label,
                 batch_size=self.config.get("DINGTALK_BATCH_SIZE", 20000),
                 batch_interval=self.config.get("BATCH_SEND_INTERVAL", 1.0),
+                msg_type=self.config.get("DINGTALK_MSG_TYPE", "markdown"),
+                keyword=self.config.get("DINGTALK_KEYWORD", ""),
                 split_content_func=self.split_content_func,
                 rss_items=ri,
                 rss_new_items=rn,
@@ -830,4 +832,3 @@ class NotificationDispatcher:
             custom_smtp_port=self.config.get("EMAIL_SMTP_PORT", ""),
             get_time_func=self.get_time_func,
         )
-

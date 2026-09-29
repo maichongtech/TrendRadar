@@ -271,6 +271,8 @@ notification:
 
     dingtalk:
       webhook_url: ""                 # DingTalk bot webhook URL
+      msg_type: "markdown"            # Message format: markdown | text
+      keyword: ""                      # Optional security keyword, sent in a text message body
 
     wework:
       webhook_url: ""                 # WeCom (Enterprise WeChat) bot webhook URL

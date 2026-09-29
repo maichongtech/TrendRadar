@@ -238,6 +238,8 @@ def send_to_dingtalk(
     *,
     batch_size: int = 20000,
     batch_interval: float = 1.0,
+    msg_type: str = "markdown",
+    keyword: str = "",
     split_content_func: Callable = None,
     rss_items: Optional[list] = None,
     rss_new_items: Optional[list] = None,
@@ -300,18 +302,26 @@ def send_to_dingtalk(
 
     # 逐批发送
     for i, batch_content in enumerate(batches, 1):
+        if keyword and keyword not in batch_content:
+            batch_content = f"{keyword}\n{batch_content}"
         content_size = len(batch_content.encode("utf-8"))
         print(
             f"发送{log_prefix}第 {i}/{len(batches)} 批次，大小：{content_size} 字节 [{report_type}]"
         )
 
-        payload = {
-            "msgtype": "markdown",
-            "markdown": {
-                "title": f"TrendRadar 热点分析报告 - {report_type}",
-                "text": batch_content,
-            },
-        }
+        if msg_type == "text":
+            payload = {
+                "msgtype": "text",
+                "text": {"content": strip_markdown(batch_content)},
+            }
+        else:
+            payload = {
+                "msgtype": "markdown",
+                "markdown": {
+                    "title": f"TrendRadar 热点分析报告 - {report_type}",
+                    "text": batch_content,
+                },
+            }
 
         try:
             response = requests.post(
